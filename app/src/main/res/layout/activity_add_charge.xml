@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="ww.com.detailcharge.activity.AddChargeActivity">
+
+    <include layout="@layout/ll_title_layout"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/color0AA770"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        >
+
+        <RadioGroup
+            android:id="@+id/rg_charge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+
+            <RadioButton
+                android:id="@+id/rb_expense"
+                style="@style/charge_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="支出"
+                android:checked="true"
+                android:background="@drawable/selector_chage_bg"
+                />
+
+            <RadioButton
+                android:id="@+id/rb_income"
+                style="@style/charge_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="收入"
+                android:background="@drawable/selector_chage_bg_right"
+                />
+
+
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+  <!--  <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcv_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>-->
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+</LinearLayout>

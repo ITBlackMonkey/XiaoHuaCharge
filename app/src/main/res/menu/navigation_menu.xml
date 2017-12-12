@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.">
+
+
+    <!-- Main items -->
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_search1"
+            android:checked="true"
+            android:icon="@drawable/zhangben"
+            android:title="我的账本"/>
+
+        <item
+            android:id="@+id/nav_search2"
+            android:checked="true"
+            android:icon="@drawable/jizhang"
+            android:title="我要记账"/>
+
+        <item
+            android:id="@+id/nav_search3"
+            android:icon="@drawable/wod"
+            android:title="我的信息"
+            />
+        <item
+            android:id="@+id/nav_search4"
+            android:icon="@drawable/banben"
+            android:title="版本检查"/>
+
+        <item
+            android:id="@+id/nav_search5"
+            android:icon="@drawable/guanyu"
+            android:title="关于我们"
+            />
+
+        <item
+            android:id="@+id/btn_exit"
+            android:icon="@drawable/tuichu"
+            android:title="退出登录"/>
+    </group>
+
+</menu>
+

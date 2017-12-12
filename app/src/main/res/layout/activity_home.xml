@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true" >
+
+    <include layout="@layout/navigation_container_view"/>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/app_header"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="#ffffff"
+        app:insetForeground="@color/colorPrimaryDark"
+        app:menu="@menu/navigation_menu"
+        >
+    </android.support.design.widget.NavigationView>
+
+   <!-- <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/style_tab"
+            android:text="2017年"/>
+
+        <TextView
+            style="@style/style_tab"
+            android:text="支出（元）"/>
+
+        <TextView
+            style="@style/style_tab"
+            android:text="收入（元）"/>
+
+        <TextView
+            style="@style/style_tab"
+            android:text="结余（元）"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginRight="3dp"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="12"
+                android:textColor="#000"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:layout_width="0sp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:drawablePadding="-6dp"
+                android:drawableRight="@drawable/sanjiao32"
+                android:gravity="center_vertical"
+                android:paddingTop="3dp"
+                android:text="月"
+                android:textColor="#000"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/style_tabTop"
+            android:text="-4000"/>
+
+        <TextView
+            style="@style/style_tabTop"
+            android:text="8008"/>
+
+        <TextView
+            style="@style/style_tabTop"
+            android:text="-4536"/>
+
+    </LinearLayout>-->
+
+   <!-- <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#7D7D76"/>
+
+    <RelativeLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:src="@drawable/plus"/>
+
+    </RelativeLayout>-->
+</android.support.v4.widget.DrawerLayout>

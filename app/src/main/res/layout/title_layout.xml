@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/color0AA770"
+    app:title=""
+   >
+
+    <TextView
+        android:gravity="center"
+        android:textSize="16sp"
+        android:id="@+id/tv_center"
+        android:layout_gravity="center"
+        android:textColor="@android:color/white"
+        android:text="我的账本"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:paddingRight="16dp"
+        android:src="@drawable/xuanze48"
+        android:id="@+id/iv_right"
+        android:layout_gravity="right"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</android.support.v7.widget.Toolbar>
