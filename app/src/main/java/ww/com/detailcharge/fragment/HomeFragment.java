@@ -2,7 +2,6 @@ package ww.com.detailcharge.fragment;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ww.com.detailcharge.R;
-import ww.com.detailcharge.activity.AddChargeActivity;
+import ww.com.detailcharge.activity.HomeActivity;
 
 import static ww.com.detailcharge.R.id.pullToRefreshRV;
 
@@ -93,7 +92,10 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(getActivity(), AddChargeActivity.class));
+        HomeActivity homeActivity = (HomeActivity) getActivity();
+        homeActivity.repleaceFragment(FragmentFactory.getFrament(5));
+        homeActivity.ivRight.setVisibility(View.GONE);
+        homeActivity.tvCenter.setText("我要记账");
     }
 
 

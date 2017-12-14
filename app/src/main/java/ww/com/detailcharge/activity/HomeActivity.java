@@ -33,13 +33,14 @@ public class HomeActivity extends BaseActivity {
 
     private NavigationView        navigationView;
     private DrawerLayout          drawerLayout;
-    private Toolbar               toolbar;
+    public Toolbar               toolbar;
     private ActionBarDrawerToggle toggle;
     private AppCompatTextView     tvHead;
     private AppCompatImageView    ivHead;
     private FrameLayout           content;
-    private TextView              tvCenter;
-    private ImageView             ivRight;
+    public TextView              tvCenter;
+    public ImageView             ivRight;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,6 @@ public class HomeActivity extends BaseActivity {
         navigationView = findView(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         tvHead = (AppCompatTextView) headerView.findViewById(R.id.tv_head);
-
         navigationView.setBackgroundColor(getResources().getColor(R.color.color0AA770));
         drawerLayout = findView(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
@@ -94,9 +94,8 @@ public class HomeActivity extends BaseActivity {
                                 repleaceFragment(FragmentFactory.getFrament(0));
                                 ivRight.setVisibility(View.VISIBLE);
                                 break;
-
                             case "我要记账":
-                                repleaceFragment(FragmentFactory.getFrament(2));
+                                repleaceFragment(FragmentFactory.getFrament(5));
                                 ivRight.setVisibility(View.GONE);
                                 break;
                             case "我的信息":
@@ -108,7 +107,6 @@ public class HomeActivity extends BaseActivity {
                                 repleaceFragment(FragmentFactory.getFrament(1));
                                 ivRight.setVisibility(View.GONE);
                                 break;
-
                             case "关于我们":
                                 repleaceFragment(FragmentFactory.getFrament(4));
                                 ivRight.setVisibility(View.GONE);
@@ -151,7 +149,7 @@ public class HomeActivity extends BaseActivity {
     }
 
 
-    private void repleaceFragment(Fragment fragment) {
+    public void repleaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.content, fragment);
@@ -168,6 +166,7 @@ public class HomeActivity extends BaseActivity {
 
     //声明一个long类型变量：用于存放上一点击“返回键”的时刻
     private long mExitTime;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //判断用户是否点击了“返回键”

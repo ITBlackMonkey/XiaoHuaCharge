@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/ll_add_charge"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/color0AA770"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        >
+
+        <RadioGroup
+            android:id="@+id/rg_charge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+
+            <RadioButton
+                android:id="@+id/rb_expense"
+                style="@style/charge_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_chage_bg"
+                android:text="支出"
+                />
+
+            <RadioButton
+                android:id="@+id/rb_income"
+                style="@style/charge_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_chage_bg_right"
+                android:text="收入"
+                />
+
+
+        </RadioGroup>
+
+
+    </LinearLayout>
+</merge>

@@ -31,10 +31,7 @@ public class FragmentFactory {
                     fragmentMap.put(key,new AboutUsFragment());
                     break;
                 case 5:
-                    fragmentMap.put(key,new ExpenseFragment());
-                    break;
-                case 6:
-                    fragmentMap.put(key,new IncomeFragment());
+                    fragmentMap.put(key,new AddChargeFragment());
                     break;
 
                 default:
