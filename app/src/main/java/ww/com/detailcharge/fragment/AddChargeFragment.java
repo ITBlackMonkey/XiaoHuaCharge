@@ -35,6 +35,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
     private List<String>      textExpenseList;
     private List<Integer>     picIncomeList;
     private List<String>      textIncomeList;
+    private int               lastPosition = 0;
     int[] picExpenseArray = {
             R.drawable.cate1_1,
             R.drawable.cate2_1,
@@ -144,8 +145,11 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
     private void initData() {
         getData();
         adapter = new MyRecyclerViewAdapter(getActivity(), getPicExpenseList(), getTextExpenseList(), this);
+        rcvView.setHasFixedSize(true);
         rcvView.setAdapter(adapter);
+        setRecViewOnclick(adapter);
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -160,14 +164,16 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
                 ToastUtils.show(getActivity(), "expense");
                 adapter = new MyRecyclerViewAdapter(getActivity(), getPicExpenseList(), getTextExpenseList(), this);
                 adapter.notifyDataSetChanged();
+                setRecViewOnclick(adapter);
                 rcvView.setAdapter(adapter);
                 break;
 
             case R.id.rb_income:
-//                homeActivity.repleaceFragment(FragmentFactory.getFrament(6));
+                //                homeActivity.repleaceFragment(FragmentFactory.getFrament(6));
                 adapter = new MyRecyclerViewAdapter(getActivity(), getPicIncomeList(), getTextIncomeList(), this);
                 adapter.notifyDataSetChanged();
                 rcvView.setAdapter(adapter);
+                setRecViewOnclick(adapter);
                 ToastUtils.show(getActivity(), "income");
             default:
                 break;
@@ -237,5 +243,25 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
             llBottom.setVisibility(View.GONE);
         }
 
+    }
+
+    private void setRecViewOnclick(MyRecyclerViewAdapter adapter) {
+        adapter.setOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int postion) {
+                View lastChildView = rcvView.getChildAt(lastPosition);
+                View nowChildView = rcvView.getChildAt(postion);
+                MyRecyclerViewAdapter.MyViewHolder last = (MyRecyclerViewAdapter.MyViewHolder) rcvView.getChildViewHolder(lastChildView);
+                MyRecyclerViewAdapter.MyViewHolder now = (MyRecyclerViewAdapter.MyViewHolder) rcvView.getChildViewHolder(nowChildView);
+                if (lastPosition != postion) {
+                    now.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
+                    last.llIconBg.setBackgroundResource(R.drawable.yuan_gray128);
+                } else {
+                    now.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
+                    last.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
+                }
+                lastPosition = postion;
+            }
+        });
     }
 }

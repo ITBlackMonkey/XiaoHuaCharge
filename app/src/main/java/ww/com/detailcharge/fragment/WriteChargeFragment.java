@@ -15,11 +15,9 @@ import ww.com.detailcharge.R;
 public class WriteChargeFragment extends Fragment {
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_write_charge, container, false);
     }
 
