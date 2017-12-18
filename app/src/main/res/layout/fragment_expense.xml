@@ -6,9 +6,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ww.com.detailcharge.activity.AddChargeActivity">
+    >
 
     <include layout="@layout/ll_group"/>
+
+    <LinearLayout
+        android:id="@+id/have_chosen"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        >
+
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:id="@+id/iv_title_icon"
+            android:padding="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitCenter"
+            />
+
+        <TextView
+            android:id="@+id/tv_title_text"
+           android:paddingLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_account_num"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center|right"
+            android:maxLines="2"
+            android:paddingRight="16sp"
+            android:text="0.3877437"
+            android:textColor="#000"
+            android:textSize="19sp"/>
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scroll"

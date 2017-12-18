@@ -24,6 +24,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     List<Integer> picList;
     List<String>  textList;
     Fragment      fragment;
+    int tag;
     private OnItemClickListener mOnItemClickListener;
     public  MyViewHolder        viewHolder;
 
@@ -39,6 +40,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         View view = LayoutInflater.from(context).inflate(R.layout.item_add_charge, parent, false);
         viewHolder = new MyViewHolder(view);
         viewHolder.llBg.setOnClickListener(this);
+        if (viewHolder != null) {
+
+        }
         return viewHolder;
     }
 
@@ -46,7 +50,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.textView.setText(textList.get(position));
         holder.ivPic.setImageResource(picList.get(position));
-        //        holder.llBg.setOnTouchListener(this);
         holder.llBg.setTag(position);
     }
 
@@ -56,22 +59,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return picList.size();
     }
 
-   /* @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-      *//*  if (event.getAction() == MotionEvent.ACTION_UP) {
-            //            TODO: 响应点击事件
-            ToastUtils.show(context, textList.get((int) v.getTag()));
-            AddChargeFragment addChargeFragment = (AddChargeFragment) fragment;
-            addChargeFragment.setBottomVisibility(true);
-        }*//*
-        return false;
-    }*/
-
     @Override
     public void onClick(View v) {
         if (mOnItemClickListener != null) {
-            mOnItemClickListener.onItemClick(v, (int) v.getTag());
+            tag = (int) v.getTag();
+            mOnItemClickListener.onItemClick(v, tag);
         }
     }
 
@@ -100,4 +92,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         this.mOnItemClickListener = listener;
     }
 
+    public List<Integer> getPicList(){
+        return picList;
+    }
+
+    public List<String> getTextList(){
+        return textList;
+    }
 }

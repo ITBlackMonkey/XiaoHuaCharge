@@ -8,9 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
     private List<String>      textExpenseList;
     private List<Integer>     picIncomeList;
     private List<String>      textIncomeList;
-    private int               lastPosition = 0;
+    private int lastPosition = 0;
     int[] picExpenseArray = {
             R.drawable.cate1_1,
             R.drawable.cate2_1,
@@ -45,9 +47,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
             R.drawable.cate6_1,
             R.drawable.cate7_1,
             R.drawable.cate8_1,
-            R.drawable.cate9_1,
-            R.drawable.cate10_1,
-            R.drawable.cate11_1,
+            R.drawable.cate_37_1,
             R.drawable.cate12_1,
             R.drawable.cate13_1,
             R.drawable.cate14_1,
@@ -56,16 +56,14 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
             R.drawable.cate17_1,
             R.drawable.cate18_1,
             R.drawable.cate19_1,
-            R.drawable.cate20_1,
             R.drawable.cate21_1,
             R.drawable.cate22_1,
             R.drawable.cate23_1,
             R.drawable.cate24_1,
             R.drawable.cate25_1,
             R.drawable.cate26_1,
-            R.drawable.cate27_1,
             R.drawable.cate35_1,
-            R.drawable.cate36_1,
+            R.drawable.cate36_1
     };
 
     int[] picIncomeArray = {
@@ -87,9 +85,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
             "果蔬",
             "运动",
             "娱乐",
-            "理财",
-            "股票",
-            "基金",
+            "房租",
             "还款",
             "发红包",
             "医疗",
@@ -98,16 +94,15 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
             "美容",
             "住房",
             "旅行",
-            "烟酒",
             "汽车",
             "书籍",
             "学习",
             "宠物",
             "礼物",
             "办公",
-            "彩票",
             "水电",
-            "社交"
+            "社交",
+
     };
 
     String[] textIncomeArray = {
@@ -122,6 +117,9 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
     public  ScrollView            scrollView;
     private LinearLayout          llBottom;
     private MyRecyclerViewAdapter adapter;
+    private ImageView             ivTitleIcon;
+    private TextView              tvTitleText;
+    private TextView              tvAccountNum;
 
     @Nullable
     @Override
@@ -132,6 +130,9 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
         rcvView = (RecyclerView) view.findViewById(R.id.rcv_view);
         scrollView = (ScrollView) view.findViewById(R.id.scroll);
         llBottom = (LinearLayout) view.findViewById(R.id.ll_bottom);
+        ivTitleIcon = (ImageView) view.findViewById(R.id.iv_title_icon);
+        tvTitleText = (TextView) view.findViewById(R.id.tv_title_text);
+        tvAccountNum = (TextView) view.findViewById(R.id.tv_account_num);
         rbExpense.setOnClickListener(this);
         rbIncome.setOnClickListener(this);
 
@@ -161,18 +162,32 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rb_expense:
+                if (adapter != null) {
+                    rcvView.removeAllViews();
+                    adapter.notifyDataSetChanged();
+                }
                 ToastUtils.show(getActivity(), "expense");
                 adapter = new MyRecyclerViewAdapter(getActivity(), getPicExpenseList(), getTextExpenseList(), this);
                 adapter.notifyDataSetChanged();
+                ivTitleIcon.setBackground(null);
+                ivTitleIcon.setImageDrawable(null);
+                tvTitleText.setText("");
                 setRecViewOnclick(adapter);
                 rcvView.setAdapter(adapter);
                 break;
 
             case R.id.rb_income:
+                if (adapter != null) {
+                    rcvView.removeAllViews();
+                    adapter.notifyDataSetChanged();
+                }
                 //                homeActivity.repleaceFragment(FragmentFactory.getFrament(6));
                 adapter = new MyRecyclerViewAdapter(getActivity(), getPicIncomeList(), getTextIncomeList(), this);
                 adapter.notifyDataSetChanged();
                 rcvView.setAdapter(adapter);
+                ivTitleIcon.setBackground(null);
+                ivTitleIcon.setImageDrawable(null);
+                tvTitleText.setText("");
                 setRecViewOnclick(adapter);
                 ToastUtils.show(getActivity(), "income");
             default:
@@ -245,22 +260,32 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
 
     }
 
-    private void setRecViewOnclick(MyRecyclerViewAdapter adapter) {
+    private void setRecViewOnclick(final MyRecyclerViewAdapter adapter) {
         adapter.setOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
+
             @Override
             public void onItemClick(View view, int postion) {
                 View lastChildView = rcvView.getChildAt(lastPosition);
                 View nowChildView = rcvView.getChildAt(postion);
-                MyRecyclerViewAdapter.MyViewHolder last = (MyRecyclerViewAdapter.MyViewHolder) rcvView.getChildViewHolder(lastChildView);
-                MyRecyclerViewAdapter.MyViewHolder now = (MyRecyclerViewAdapter.MyViewHolder) rcvView.getChildViewHolder(nowChildView);
-                if (lastPosition != postion) {
-                    now.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
-                    last.llIconBg.setBackgroundResource(R.drawable.yuan_gray128);
-                } else {
-                    now.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
-                    last.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
+                if (nowChildView != null && lastChildView != null) {
+                    MyRecyclerViewAdapter.MyViewHolder last = (MyRecyclerViewAdapter.MyViewHolder) rcvView.getChildViewHolder(lastChildView);
+                    MyRecyclerViewAdapter.MyViewHolder now = (MyRecyclerViewAdapter.MyViewHolder) rcvView.getChildViewHolder(nowChildView);
+                    if (lastPosition != postion) {
+                        now.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
+                        last.llIconBg.setBackgroundResource(R.drawable.yuan_gray128);
+                    } else {
+                        now.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
+                    }
+                    Integer integer = adapter.getPicList().get(postion);
+                    String text = adapter.getTextList().get(postion);
+                    ivTitleIcon.setBackgroundResource(R.drawable.yuan_yello128);
+                    ivTitleIcon.setImageResource(integer);
+                    tvTitleText.setText(text);
+                    lastPosition = postion;
+                }   else {
+                    ToastUtils.show(getContext(),"请重新选择！");
                 }
-                lastPosition = postion;
+
             }
         });
     }
