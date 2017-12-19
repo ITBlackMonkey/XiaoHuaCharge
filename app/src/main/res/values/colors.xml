@@ -6,4 +6,6 @@
     <color name="color0AA770">#0AA770</color>
     <color name="color000">#000</color>
     <color name="main_bg">#f0f0f0</color>
+    <color name="colorLightGray">#f0e9e9</color>
+    <color name="colorGray">#c1bfbf</color>
 </resources>

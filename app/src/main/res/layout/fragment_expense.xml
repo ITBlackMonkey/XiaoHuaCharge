@@ -11,6 +11,7 @@
     <include layout="@layout/ll_group"/>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/have_chosen"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -20,20 +21,20 @@
         >
 
         <ImageView
-            android:layout_gravity="center_vertical"
             android:id="@+id/iv_title_icon"
-            android:padding="10dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             />
 
         <TextView
             android:id="@+id/tv_title_text"
-           android:paddingLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingLeft="10dp"
             android:text=""
             android:textColor="#000"
             android:textSize="16sp"/>
@@ -41,20 +42,20 @@
         <TextView
             android:id="@+id/tv_account_num"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center|right"
-            android:maxLines="2"
             android:paddingRight="16sp"
-            android:text="0.3877437"
+            android:text="0.00"
             android:textColor="#000"
             android:textSize="19sp"/>
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/scroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,25 +65,262 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rcv_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="10dp"
+                android:layout_height="wrap_content"
                 >
             </android.support.v7.widget.RecyclerView>
 
             <LinearLayout
+                android:layout_gravity="top"
                 android:id="@+id/ll_bottom"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@color/color0AA770"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_height="match_parent"
+                android:gravity="bottom">
 
-                <EditText
+                <android.support.percent.PercentRelativeLayout
+                    android:id="@+id/pl_bottom"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"/>
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rcv_view"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/page2_gradient">
+
+                    <RelativeLayout
+                        android:id="@+id/calculator_banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:background="#f3efef"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/add_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="23dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                            android:background="#00000000"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/pencil"/>
+                    </RelativeLayout>
+
+                    <android.support.percent.PercentRelativeLayout
+                        android:id="@+id/input_board"
+                        android:layout_width="0dp"
+                        android:layout_height="180dp"
+                        android:layout_below="@id/calculator_banner"
+                        android:useDefaultMargins="false"
+                        app:layout_widthPercent="70%">
+
+                        <Button
+                            android:id="@+id/one"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="1"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/two"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_toEndOf="@id/one"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="2"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/three"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_toEndOf="@id/two"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="3"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/four"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_below="@id/one"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="4"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/five"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_below="@id/one"
+                            android:layout_toEndOf="@id/four"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="5"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/six"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_below="@id/one"
+                            android:layout_toEndOf="@id/five"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="6"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/seven"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_below="@id/four"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="7"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/eight"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_below="@id/four"
+                            android:layout_toEndOf="@id/seven"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="8"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/nine"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_below="@id/four"
+                            android:layout_toEndOf="@id/eight"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="9"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/clear"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_below="@id/seven"
+                            android:background="@drawable/calculator_button"
+                            android:text="清零"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/zero"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_below="@id/seven"
+                            android:layout_toEndOf="@id/clear"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorNumOnclick"
+                            android:text="0"
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                        <Button
+                            android:id="@+id/dot"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_below="@id/seven"
+                            android:layout_toEndOf="@id/zero"
+                            android:background="@drawable/calculator_button"
+                            android:fontFamily="sans-serif-light"
+                            android:onClick="calculatorPushDot"
+                            android:text="."
+                            android:textColor="#000"
+                            android:textSize="19sp"
+                            app:layout_heightPercent="25%"
+                            app:layout_widthPercent="33%"/>
+
+                    </android.support.percent.PercentRelativeLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/calculator_sidebar"
+                        android:layout_width="0dp"
+                        android:layout_height="180dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignTop="@id/input_board"
+                        android:background="@drawable/calculator_button"
+                        android:orientation="vertical"
+                        app:layout_widthPercent="31%">
+
+                        <TextView
+                            android:id="@+id/anime_words"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center"
+                            android:text="记得点我啊=w=."
+                            android:textColor="#000"
+                            android:textSize="15sp"/>
+
+                        <ImageButton
+                            android:id="@+id/add_finish"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginTop="27dp"
+                            android:background="#00000000"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/konata3"/>
+
+                    </LinearLayout>
+
+                </android.support.percent.PercentRelativeLayout>
             </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

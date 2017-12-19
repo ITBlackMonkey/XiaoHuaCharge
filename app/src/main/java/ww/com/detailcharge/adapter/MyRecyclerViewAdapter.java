@@ -40,9 +40,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         View view = LayoutInflater.from(context).inflate(R.layout.item_add_charge, parent, false);
         viewHolder = new MyViewHolder(view);
         viewHolder.llBg.setOnClickListener(this);
-        if (viewHolder != null) {
-
-        }
         return viewHolder;
     }
 
@@ -50,7 +47,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.textView.setText(textList.get(position));
         holder.ivPic.setImageResource(picList.get(position));
-        holder.llBg.setTag(position);
+        holder.llBg.setTag(holder.getLayoutPosition());
     }
 
 

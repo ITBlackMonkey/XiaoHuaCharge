@@ -9,8 +9,8 @@
 
     <LinearLayout
         android:id="@+id/ll_icon_bg"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:background="@drawable/selector_pic_bg"
