@@ -8,7 +8,7 @@ import cn.bmob.v3.BmobObject;
 
 public class UserInfo extends BmobObject {
 
-
+    private int    id; //用户ID
     private String username;      // 用户名
     private String password;       // 密码
     private int    type;              // 用户类型
@@ -16,6 +16,14 @@ public class UserInfo extends BmobObject {
     private int    userimg;          //头像
     private String phoneNumber;   // 手机号
     private String email;           //电子邮箱
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;

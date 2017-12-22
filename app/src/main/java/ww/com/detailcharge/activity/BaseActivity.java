@@ -56,7 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void initData() {
     }
 
-    ;
+
 
     public void startActivity(Class<?> clazz) {
         startActivity(clazz, null);

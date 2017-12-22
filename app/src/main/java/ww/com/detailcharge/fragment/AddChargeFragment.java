@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,19 +22,29 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import ww.com.detailcharge.MyApplication;
 import ww.com.detailcharge.R;
 import ww.com.detailcharge.activity.HomeActivity;
 import ww.com.detailcharge.adapter.MyRecyclerViewAdapter;
+import ww.com.detailcharge.db.AddCharge;
+import ww.com.detailcharge.global.ChargeType;
+import ww.com.detailcharge.precenter.AddChargePrecenter;
+import ww.com.detailcharge.precenter.iview.IAddChargeView;
+import ww.com.detailcharge.utils.tools.CaladarUtils;
 import ww.com.detailcharge.utils.tools.GlobalVariables;
+import ww.com.detailcharge.utils.tools.SPTools;
+import ww.com.detailcharge.viewutis.LoadingDialog;
+import ww.com.detailcharge.viewutis.MySrollView;
 import ww.com.detailcharge.viewutis.ToastUtils;
 
 import static cn.bmob.v3.Bmob.getApplicationContext;
+import static ww.com.detailcharge.R.id.tv_title_text;
 
 /**
  * @author: WANGWEI on 2017/12/11 0011.
  */
 
-public class AddChargeFragment extends Fragment implements View.OnClickListener {
+public class AddChargeFragment extends Fragment implements View.OnClickListener, IAddChargeView {
 
     private RadioButton       rbExpense;
     private RadioButton       rbIncome;
@@ -123,21 +132,23 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
             "礼金",
             "其他",
     };
-    public ScrollView scrollView;
+    public MySrollView scrollView;
 
     private MyRecyclerViewAdapter adapter;
     private ImageView             ivTitleIcon;
     private TextView              tvTitleText;
     private TextView              tvAccountNum;
     private LinearLayout          llBottom;
-    float downY;
-    float upY;
-    private TextView moneyText;
+    private TextView              moneyText;
     private SimpleDateFormat formatItem    = new SimpleDateFormat("yyyy年MM月dd日");
     private SimpleDateFormat formatSum     = new SimpleDateFormat("yyyy年MM月");
     private DecimalFormat    decimalFormat = new DecimalFormat("0.00");
-    private String money;
-    private LinearLayout moneyWindow;
+    private String             money;
+    private LinearLayout       moneyWindow;
+    private AddChargePrecenter chargePrecenter;
+
+    List<AddCharge> dayList = new ArrayList<>();
+    private boolean aBoolean;
 
     @Nullable
     @Override
@@ -146,10 +157,10 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
         rbExpense = (RadioButton) view.findViewById(R.id.rb_expense);
         rbIncome = (RadioButton) view.findViewById(R.id.rb_income);
         rcvView = (RecyclerView) view.findViewById(R.id.rcv_view);
-        scrollView = (ScrollView) view.findViewById(R.id.scroll);
+        scrollView = (MySrollView) view.findViewById(R.id.scroll);
 
         ivTitleIcon = (ImageView) view.findViewById(R.id.iv_title_icon);
-        tvTitleText = (TextView) view.findViewById(R.id.tv_title_text);
+        tvTitleText = (TextView) view.findViewById(tv_title_text);
         tvAccountNum = (TextView) view.findViewById(R.id.tv_account_num);
 
         llBottom = (LinearLayout) view.findViewById(R.id.ll_bottom);
@@ -169,7 +180,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
         view.findViewById(R.id.clear).setOnClickListener(this);
         view.findViewById(R.id.dot).setOnClickListener(this);
         view.findViewById(R.id.calculator_banner).setOnClickListener(this);
-
+        view.findViewById(R.id.add_finish).setOnClickListener(this);
         rbExpense.setOnClickListener(this);
         rbIncome.setOnClickListener(this);
 
@@ -185,7 +196,8 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
         adapter = new MyRecyclerViewAdapter(getActivity(), getPicExpenseList(), getTextExpenseList(), this);
         rcvView.setHasFixedSize(true);
         rcvView.setAdapter(adapter);
-        setRecViewOnclick(adapter);
+        setRecViewOnclick(adapter, ChargeType.CHARGE_EXPENSE);
+        chargePrecenter = new AddChargePrecenter(this);
     }
 
 
@@ -203,6 +215,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
                 llBottom.setVisibility(View.GONE);
                 lastPosition = 0;
                 moneyText.setText("0.00");
+                calculatorClear();
                 if (adapter != null) {
                     rcvView.removeAllViews();
                     adapter.notifyDataSetChanged();
@@ -213,7 +226,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
                 ivTitleIcon.setBackground(null);
                 ivTitleIcon.setImageDrawable(null);
                 tvTitleText.setText("");
-                setRecViewOnclick(adapter);
+                setRecViewOnclick(adapter, ChargeType.CHARGE_EXPENSE);
                 rcvView.setAdapter(adapter);
                 break;
 
@@ -221,6 +234,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
                 moneyWindow.setVisibility(View.GONE);
                 lastPosition = 0;
                 moneyText.setText("0.00");
+                calculatorClear();
                 llBottom.setVisibility(View.GONE);
                 if (adapter != null) {
                     rcvView.removeAllViews();
@@ -233,16 +247,19 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
                 ivTitleIcon.setBackground(null);
                 ivTitleIcon.setImageDrawable(null);
                 tvTitleText.setText("");
-                setRecViewOnclick(adapter);
+                setRecViewOnclick(adapter, ChargeType.CHARGE_INCOME);
                 ToastUtils.show(getActivity(), "income");
-
+                break;
             case R.id.add_finish:
                 String moneyString = moneyText.getText().toString();
                 if (moneyString.equals("0.00") || GlobalVariables.getmInputMoney().equals(""))
                     Toast.makeText(getApplicationContext(), "唔姆，你还没输入金额", Toast.LENGTH_SHORT).show();
                 else {
+                    // 将数据存入数据库
+                    putDatebase(moneyString);
                     calculatorClear();
                 }
+                llBottom.setVisibility(View.GONE);
                 break;
             case R.id.clear:
                 calculatorClear();
@@ -255,6 +272,30 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
                 calculatorNumOnclick(v);
                 break;
         }
+    }
+
+    private void putDatebase(String text) {
+        LoadingDialog.showProgress(getActivity(), "数据保存中。。。");
+        int chargeType = 0;
+        boolean checked = rbExpense.isChecked();
+        if (checked) {
+            chargeType = ChargeType.CHARGE_EXPENSE;
+        } else {
+            chargeType = ChargeType.CHARGE_INCOME;
+        }
+        Integer ivTitleIconTag = (Integer) ivTitleIcon.getTag();
+        String moneyText = tvTitleText.getText().toString();
+        int userId = MyApplication.getInstance().getUserinfo().getId();
+        String day = SPTools.spGetString(getContext(), "Day");
+        if (day.equals("")) {
+            aBoolean = true;
+        } else if (!day.equals(CaladarUtils.StringData("DAY"))) {
+            aBoolean = true;
+        } else {
+            aBoolean = false;
+        }
+
+        chargePrecenter.addCharge(userId, chargeType, ivTitleIconTag, moneyText, text, "", aBoolean);
     }
 
     @Override
@@ -313,22 +354,12 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
     }
 
 
-    public void setBottomVisibility(boolean aboolean) {
-        if (aboolean) {
-
-        } else {
-
-        }
-
-    }
-
-    private void setRecViewOnclick(final MyRecyclerViewAdapter adapter) {
+    private void setRecViewOnclick(final MyRecyclerViewAdapter adapter, int type) {
         adapter.setOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int postion) {
                 moneyText.setText("0.00");
-                money = "";
-                GlobalVariables.setmInputMoney("");
+                calculatorClear();
                 llBottom.setVisibility(View.VISIBLE);
                 moneyWindow.setVisibility(View.VISIBLE);
                 View lastChildView = rcvView.getLayoutManager().findViewByPosition(lastPosition);
@@ -346,6 +377,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
                     String text = adapter.getTextList().get(postion);
                     ivTitleIcon.setBackgroundResource(R.drawable.yuan_yello128);
                     ivTitleIcon.setImageResource(integer);
+                    ivTitleIcon.setTag(integer);
                     tvTitleText.setText(text);
                     lastPosition = postion;
                     scrollToBottom(scrollView);
@@ -357,13 +389,26 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
         });
     }
 
-    private void scrollToBottom(final ScrollView scrollView) {
+    private void scrollToBottom(final MySrollView scrollView) {
         scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 scrollView.post(new Runnable() {
                     public void run() {
                         scrollView.fullScroll(View.FOCUS_DOWN);
+                    }
+                });
+            }
+        });
+    }
+
+    private void scrollToTop(final MySrollView scrollView) {
+        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                scrollView.post(new Runnable() {
+                    public void run() {
+                        scrollView.fullScroll(View.FOCUS_UP);
                     }
                 });
             }
@@ -392,7 +437,6 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
             LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
             //获取最后一个可见view的位置
             return linearManager.findLastVisibleItemPosition();
-
         }
 
         return 0;
@@ -439,4 +483,21 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener 
         GlobalVariables.setHasDot(false);
     }
 
+    @Override
+    public void savaSucc(AddCharge addCharge) {
+        ToastUtils.show(getActivity(), "恭喜你，信息录入成功！");
+        HomeActivity homeActivity = (HomeActivity) getActivity();
+        homeActivity.repleaceFragment(FragmentFactory.getFrament(0));
+        dayList.add(addCharge);
+        SPTools.spPutString(getActivity(), "Day", CaladarUtils.StringData("DAY"));
+        LoadingDialog.dismissprogress();
+
+    }
+
+    @Override
+    public void saveFaill(String errMsg) {
+        LoadingDialog.dismissprogress();
+        ToastUtils.show(getActivity(), "Sorry，信息录入失败！");
+        calculatorClear();
+    }
 }

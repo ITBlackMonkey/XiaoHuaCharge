@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F7F7F7"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="01日"
+            android:textColor="@color/color000"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_week"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="星期五"
+            android:textColor="@color/color000"
+            android:textSize="12sp"/>
+
+
+        <TextView
+            android:id="@+id/tv_charge_type"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="支出："
+            android:textColor="@color/color000"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_charge_num"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="98837464738"
+            android:textColor="@color/color000"
+            android:textSize="14sp"
+            />
+    </LinearLayout>
+</LinearLayout>

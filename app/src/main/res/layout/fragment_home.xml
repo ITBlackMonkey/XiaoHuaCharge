@@ -32,6 +32,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -43,6 +44,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tv_month"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
@@ -96,6 +98,7 @@
                 android:text="支出(元)"/>
 
             <TextView
+                android:id="@+id/tv_title_expense"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom|center"
@@ -118,6 +121,7 @@
                 android:text="收入(元)"/>
 
             <TextView
+                android:id="@+id/tv_title_income"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
@@ -139,6 +143,7 @@
                 android:text="结余(元)"/>
 
             <TextView
+                android:id="@+id/tv_title_jieyu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"

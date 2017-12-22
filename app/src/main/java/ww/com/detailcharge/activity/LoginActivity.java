@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ww.com.detailcharge.MyApplication;
 import ww.com.detailcharge.R;
 import ww.com.detailcharge.db.UserInfo;
 import ww.com.detailcharge.precenter.LoginPrecenter;
@@ -51,6 +50,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         findView(R.id.btn_login).setOnClickListener(this);
     }
 
+
     @Override
     public void onClick(View v) {
 
@@ -60,7 +60,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 password = etPasssword.getText().toString().trim();
                 phone = etPhone.getText().toString().trim();
                 if (loginPrecenter.emptyChecked(name, password, phone)) {
-                    LoadingDialog.showProgress(this,"登录中。。。");
+                    LoadingDialog.showProgress(this, "登录中。。。");
                     loginPrecenter.login(name, password, phone);
                 }
                 break;
@@ -122,7 +122,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         info.setUsername(name);
         info.setPassword(password);
         info.setPhoneNumber(phone);
-        MyApplication.getInstance().setUserInfo(info);
         if (checkBox.isChecked()) {
             SPTools.spPutString(this, "uname", name);
             SPTools.spPutString(this, "upass", password);
@@ -131,6 +130,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             SPTools.spClear(this);
         }
         LoadingDialog.dismissprogress();
+    }
+
+    @Override
+    public void saveSucc() {
+
+    }
+
+    @Override
+    public void saveFaill(String errMsg) {
+
     }
 
     @Override
@@ -144,6 +153,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     //声明一个long类型变量：用于存放上一点击“返回键”的时刻
     private long mExitTime;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //判断用户是否点击了“返回键”

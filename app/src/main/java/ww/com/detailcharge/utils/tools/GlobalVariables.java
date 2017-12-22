@@ -1,8 +1,5 @@
 package ww.com.detailcharge.utils.tools;
 
-/**
- * Created by yuukidach on 17-3-21.
- */
 
 public class GlobalVariables {
     private static String mDate = "";

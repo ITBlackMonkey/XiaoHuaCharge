@@ -7,6 +7,9 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import ww.com.detailcharge.MyApplication;
+import ww.com.detailcharge.bmob.MySaveListener;
+import ww.com.detailcharge.db.DayClass;
 import ww.com.detailcharge.db.UserInfo;
 import ww.com.detailcharge.precenter.iview.ILoginView;
 import ww.com.detailcharge.utils.threadutil.ThreadUtils;
@@ -57,9 +60,8 @@ public class LoginPrecenter {
                                 iLoginView.phoneErr();
                                 return;
                             }
-
                             iLoginView.loginSucc();
-
+                            MyApplication.getInstance().setUserInfo(info);
                         }
                     });
 
@@ -90,4 +92,28 @@ public class LoginPrecenter {
     }
 
 
+    public void getDayFromServer() {
+
+    }
+
+    public void setDay4Server(final String day) {
+        ThreadUtils.runOnSubthread(new Runnable() {
+            @Override
+            public void run() {
+                DayClass dayClass = new DayClass();
+                dayClass.setDay(day);
+                dayClass.save(new MySaveListener() {
+                    @Override
+                    public void succ() {
+                        iLoginView.saveSucc();
+                    }
+
+                    @Override
+                    public void faill(String errMsg) {
+                        iLoginView.saveFaill(errMsg);
+                    }
+                });
+            }
+        });
+    }
 }

@@ -13,4 +13,6 @@ public interface ILoginView {
     public void phoneErr();
     public void loginErr(String errMsg);
     public void loginSucc();
+    void saveSucc();
+    void saveFaill(String errMsg);
 }

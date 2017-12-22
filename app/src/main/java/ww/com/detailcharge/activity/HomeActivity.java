@@ -24,22 +24,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import ww.com.detailcharge.MyApplication;
 import ww.com.detailcharge.R;
 import ww.com.detailcharge.db.UserInfo;
+import ww.com.detailcharge.fragment.AddChargeFragment;
 import ww.com.detailcharge.fragment.FragmentFactory;
 
 public class HomeActivity extends BaseActivity {
 
     private NavigationView        navigationView;
     private DrawerLayout          drawerLayout;
-    public Toolbar               toolbar;
+    public  Toolbar               toolbar;
     private ActionBarDrawerToggle toggle;
     private AppCompatTextView     tvHead;
     private AppCompatImageView    ivHead;
     private FrameLayout           content;
-    public TextView              tvCenter;
-    public ImageView             ivRight;
+    public  TextView              tvCenter;
+    public  ImageView             ivRight;
 
 
     @Override
@@ -153,6 +156,7 @@ public class HomeActivity extends BaseActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.content, fragment);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -170,8 +174,14 @@ public class HomeActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //判断用户是否点击了“返回键”
+        Fragment visibleFragment = getVisibleFragment();
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             //与上次点击返回键时刻作差
+            if (visibleFragment instanceof AddChargeFragment) {
+                repleaceFragment(FragmentFactory.getFrament(0));
+                return true;
+            }
+
             if ((System.currentTimeMillis() - mExitTime) > 2000) {
                 //大于2000ms则认为是误操作，使用Toast进行提示
                 Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
@@ -184,6 +194,16 @@ public class HomeActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public Fragment getVisibleFragment() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment != null && fragment.isVisible()) {
+                return fragment;
+            }
+        }
+        return null;
     }
 
 }
