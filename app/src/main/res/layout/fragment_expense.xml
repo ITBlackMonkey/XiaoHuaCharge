@@ -11,13 +11,13 @@
     <include layout="@layout/ll_group"/>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/have_chosen"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="#fff"
         android:orientation="horizontal"
         android:padding="10dp"
+        android:visibility="gone"
         >
 
         <ImageView
@@ -70,12 +70,13 @@
             </android.support.v7.widget.RecyclerView>
 
             <LinearLayout
-                android:layout_gravity="top"
                 android:id="@+id/ll_bottom"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="bottom">
+                android:layout_gravity="top"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <android.support.percent.PercentRelativeLayout
                     android:id="@+id/pl_bottom"
@@ -85,25 +86,35 @@
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:background="@drawable/page2_gradient">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:id="@+id/calculator_banner"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="40dp"
                         android:background="#f3efef"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="5dp">
 
-                        <ImageButton
-                            android:id="@+id/add_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="23dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                            android:background="#00000000"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/pencil"/>
-                    </RelativeLayout>
+                        <EditText
+                            android:layout_gravity="center_vertical"
+                            android:textSize="12sp"
+                            android:id="@+id/et_des"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableLeft="@drawable/shuru64"
+                            android:hint="写点什么吧"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"/>
+                    </LinearLayout>
 
+
+                    <TextView
+                        android:background="@color/colorGray"
+                        android:layout_below="@id/calculator_banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        />
                     <android.support.percent.PercentRelativeLayout
                         android:id="@+id/input_board"
                         android:layout_width="0dp"

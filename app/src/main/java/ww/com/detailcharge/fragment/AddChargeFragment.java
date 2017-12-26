@@ -1,16 +1,21 @@
 package ww.com.detailcharge.fragment;
 
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -148,7 +153,11 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
     private AddChargePrecenter chargePrecenter;
 
     List<AddCharge> dayList = new ArrayList<>();
-    private boolean aBoolean;
+    private boolean               aBoolean;
+    private EditText              etDes;
+    private LinearLayout          llBanner;
+    private PercentRelativeLayout plInput;
+    private LinearLayout          llSidebar;
 
     @Nullable
     @Override
@@ -166,7 +175,8 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
         llBottom = (LinearLayout) view.findViewById(R.id.ll_bottom);
         moneyText = (TextView) view.findViewById(R.id.tv_account_num);
         moneyWindow = (LinearLayout) view.findViewById(R.id.have_chosen);
-
+        plInput = (PercentRelativeLayout) view.findViewById(R.id.input_board);
+        llSidebar = (LinearLayout) view.findViewById(R.id.calculator_sidebar);
         view.findViewById(R.id.one).setOnClickListener(this);
         view.findViewById(R.id.two).setOnClickListener(this);
         view.findViewById(R.id.three).setOnClickListener(this);
@@ -179,11 +189,13 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
         view.findViewById(R.id.zero).setOnClickListener(this);
         view.findViewById(R.id.clear).setOnClickListener(this);
         view.findViewById(R.id.dot).setOnClickListener(this);
-        view.findViewById(R.id.calculator_banner).setOnClickListener(this);
+
         view.findViewById(R.id.add_finish).setOnClickListener(this);
+
+        etDes = (EditText) view.findViewById(R.id.et_des);
+        llBanner = (LinearLayout) view.findViewById(R.id.calculator_banner);
         rbExpense.setOnClickListener(this);
         rbIncome.setOnClickListener(this);
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         rcvView.setLayoutManager(gridLayoutManager);
@@ -192,7 +204,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
     }
 
     private void initData() {
-        getData();
+
         adapter = new MyRecyclerViewAdapter(getActivity(), getPicExpenseList(), getTextExpenseList(), this);
         rcvView.setHasFixedSize(true);
         rcvView.setAdapter(adapter);
@@ -204,7 +216,27 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        homeActivity = (HomeActivity) getActivity();
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        final int screenHeight = metrics.heightPixels;
+
+        llBottom.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() { //当界面大小变化时，系统就会调用该方法
+                        Rect r = new Rect(); //该对象代表一个矩形（rectangle）
+                        llBottom.getWindowVisibleDisplayFrame(r); //将当前界面的尺寸传给Rect矩形
+                        int deltaHeight = screenHeight - r.bottom;  //弹起键盘时的变化高度，在该场景下其实就是键盘高度。
+                        if (deltaHeight > 150) {  //该值是随便写的，认为界面高度变化超过150px就视为键盘弹起。
+                            plInput.setVisibility(View.GONE);
+                            llSidebar.setVisibility(View.GONE);
+                            etDes.setFocusable(true);
+                        } else {
+                            plInput.setVisibility(View.VISIBLE);
+                            llSidebar.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -268,6 +300,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
             case R.id.dot:
                 calculatorPushDot();
                 break;
+
             default:
                 calculatorNumOnclick(v);
                 break;
@@ -295,7 +328,8 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
             aBoolean = false;
         }
 
-        chargePrecenter.addCharge(userId, chargeType, ivTitleIconTag, moneyText, text, "", aBoolean);
+        String desText = etDes.getText().toString().trim();
+        chargePrecenter.addCharge(userId, chargeType, ivTitleIconTag, moneyText, text, desText, aBoolean);
     }
 
     @Override
@@ -304,12 +338,6 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
         rbExpense.setChecked(true);
     }
 
-    protected void getData() {
-        mDatas = new ArrayList<String>();
-        for (int i = 'A'; i < 'z'; i++) {
-            mDatas.add("" + (char) i);
-        }
-    }
 
     private List<String> getTextExpenseList() {
         textExpenseList = new ArrayList<>();
@@ -369,7 +397,7 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
                     MyRecyclerViewAdapter.MyViewHolder now = (MyRecyclerViewAdapter.MyViewHolder) rcvView.getChildViewHolder(nowChildView);
                     if (lastPosition != postion) {
                         now.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
-                        last.llIconBg.setBackgroundResource(R.drawable.yuan_gray128);
+                        last.llIconBg.setBackgroundResource(R.drawable.yuan_bg128);
                     } else {
                         now.llIconBg.setBackgroundResource(R.drawable.yuan_yello128);
                     }
@@ -402,46 +430,6 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
         });
     }
 
-    private void scrollToTop(final MySrollView scrollView) {
-        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                scrollView.post(new Runnable() {
-                    public void run() {
-                        scrollView.fullScroll(View.FOCUS_UP);
-                    }
-                });
-            }
-        });
-    }
-
-    private int getFirstPosition(RecyclerView rec) {
-        RecyclerView.LayoutManager layoutManager = rec.getLayoutManager();
-        //判断是当前layoutManager是否为LinearLayoutManager
-        // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
-        if (layoutManager instanceof LinearLayoutManager) {
-            LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
-            //获取第一个可见view的位置
-            return linearManager.findFirstVisibleItemPosition();
-
-        }
-        return 0;
-    }
-
-    private int getLastPostion(RecyclerView rec) {
-
-        RecyclerView.LayoutManager layoutManager = rec.getLayoutManager();
-        //判断是当前layoutManager是否为LinearLayoutManager
-        // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
-        if (layoutManager instanceof LinearLayoutManager) {
-            LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
-            //获取最后一个可见view的位置
-            return linearManager.findLastVisibleItemPosition();
-        }
-
-        return 0;
-    }
-
 
     // 数字输入按钮
     public void calculatorNumOnclick(View v) {
@@ -449,8 +437,8 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
         String digit = view.getText().toString();
         String money = GlobalVariables.getmInputMoney();
         this.money = money + digit;
-        if (this.money.length() > 12) {
-            Toast.makeText(getApplicationContext(), "唔，已经上千亿了", Toast.LENGTH_SHORT).show();
+        if (this.money.length() > 7) {
+            Toast.makeText(getApplicationContext(), "真败家，一下就花了几十万。。", Toast.LENGTH_SHORT).show();
             return;
         }
         if (GlobalVariables.getmHasDot() && GlobalVariables.getmInputMoney().length() > 2) {
@@ -486,8 +474,8 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
     @Override
     public void savaSucc(AddCharge addCharge) {
         ToastUtils.show(getActivity(), "恭喜你，信息录入成功！");
-        HomeActivity homeActivity = (HomeActivity) getActivity();
-        homeActivity.repleaceFragment(FragmentFactory.getFrament(0));
+
+        getActivity().finish();
         dayList.add(addCharge);
         SPTools.spPutString(getActivity(), "Day", CaladarUtils.StringData("DAY"));
         LoadingDialog.dismissprogress();
@@ -499,5 +487,15 @@ public class AddChargeFragment extends Fragment implements View.OnClickListener,
         LoadingDialog.dismissprogress();
         ToastUtils.show(getActivity(), "Sorry，信息录入失败！");
         calculatorClear();
+    }
+
+    private boolean hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager.isActive(etDes)) {   //因为是在fragment下，所以用了getView()获取view，也可以用findViewById（）来获取父控件
+            getView().requestFocus();//使其它view获取焦点.这里因为是在fragment下,所以便用了getView(),可以指定任意其它view
+            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            return true;
+        }
+        return false;
     }
 }

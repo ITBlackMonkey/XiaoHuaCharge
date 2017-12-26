@@ -33,6 +33,7 @@ public class AddChargePrecenter {
                 addCharge.setMonth(CaladarUtils.StringData("MONTH"));
                 addCharge.setDay(CaladarUtils.StringData("DAY"));
                 addCharge.setWeek(CaladarUtils.StringData("WEEK"));
+                addCharge.setDescribe(describe);
                 addCharge.setHms(CaladarUtils.StringData("HMS"));
                 if (aBoolean) {
                     addCharge.setTitleVisibility(true);

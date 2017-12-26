@@ -2,6 +2,7 @@ package ww.com.detailcharge.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ww.com.detailcharge.R;
-import ww.com.detailcharge.activity.HomeActivity;
+import ww.com.detailcharge.activity.AddChargeActivity;
 import ww.com.detailcharge.db.AddCharge;
 import ww.com.detailcharge.global.ChargeType;
 import ww.com.detailcharge.precenter.GetChargePrecenter;
@@ -49,8 +50,8 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
     private TextView                  tvTitleExpense;
     private TextView                  tvTitleIncome;
     private TextView                  tvTieleJieyu;
-    private TextView tvYear;
-    private TextView tvMonth;
+    private TextView                  tvYear;
+    private TextView                  tvMonth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,17 +115,18 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
 
     @Override
     public void onClick(View v) {
-        HomeActivity homeActivity = (HomeActivity) getActivity();
+      /*  HomeActivity homeActivity = (HomeActivity) getActivity();
         homeActivity.repleaceFragment(FragmentFactory.getFrament(5));
         homeActivity.ivRight.setVisibility(GONE);
-        homeActivity.tvCenter.setText("我要记账");
+        homeActivity.tvCenter.setText("我要记账");*/
+        startActivity(new Intent(getActivity(), AddChargeActivity.class));
     }
 
     @Override
     public void findNoData() {
         ToastUtils.show(getActivity(), "Sorry,木有数据嘞！");
         LoadingDialog.dismissprogress();
-        SPTools.spPutString(getContext(),"Day","");
+        SPTools.spPutString(getContext(), "Day", "");
     }
 
     @Override
@@ -164,7 +166,7 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
             holder.setText(R.id.tv_charge_type, chargeType);
             holder.setImageResource(R.id.iv_imgIcon, charge.getImageDrawable());
             holder.setText(R.id.tv_hms, charge.getHms());
-            holder.setText(R.id.tv_charge_text, charge.getText());
+            holder.setText(R.id.tv_charge_text, charge.getDescribe().equals("") ? charge.getText() : charge.getDescribe());
             String chargeMoney = charge.getType() == ChargeType.CHARGE_EXPENSE ? "-" + charge.getMoneyText() : charge.getMoneyText();
             String color = charge.getType() == ChargeType.CHARGE_EXPENSE ? "#F32F83" : "#2F55F3";
             holder.setText(tv_charge_money, chargeMoney);
@@ -199,9 +201,9 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
             String strAllincome = df.format(allIncome);
             String strJieyu = df.format(jieyu);
 
-            tvTitleExpense.setText(strAllExpense.equals(".00")?"0.00":strAllExpense);
-            tvTitleIncome.setText(strAllincome.equals(".00")?"0.00":strAllincome);
-            tvTieleJieyu.setText(strJieyu.equals(".00")?"0.00":strJieyu);
+            tvTitleExpense.setText(strAllExpense.equals(".00") ? "0.00" : strAllExpense);
+            tvTitleIncome.setText(strAllincome.equals(".00") ? "0.00" : strAllincome);
+            tvTieleJieyu.setText(strJieyu.equals(".00") ? "0.00" : strJieyu);
 
         }
 
