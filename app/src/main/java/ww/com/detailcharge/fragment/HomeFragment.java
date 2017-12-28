@@ -1,6 +1,7 @@
 package ww.com.detailcharge.fragment;
 
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,6 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,15 +46,18 @@ import static ww.com.detailcharge.R.id.tv_charge_money;
 public class HomeFragment extends Fragment implements PullToRefreshListener, View.OnClickListener, IGetChargeView {
 
     List<AddCharge> list = new ArrayList<>();
-    private PullToRefreshRecyclerView pullView;
-    private ModeAdapter               modeAdapter;
-    private RelativeLayout            rlAdd;
-    private GetChargePrecenter        getChargePrecenter;
-    private TextView                  tvTitleExpense;
-    private TextView                  tvTitleIncome;
-    private TextView                  tvTieleJieyu;
-    private TextView                  tvYear;
-    private TextView                  tvMonth;
+    private PullToRefreshRecyclerView          pullView;
+    private ModeAdapter                        modeAdapter;
+    private RelativeLayout                     rlAdd;
+    private GetChargePrecenter                 getChargePrecenter;
+    private TextView                           tvTitleExpense;
+    private TextView                           tvTitleIncome;
+    private TextView                           tvTieleJieyu;
+    private TextView                           tvYear;
+    private TextView                           tvMonth;
+    private DatePickerDialog.OnDateSetListener dateSetListener;
+    private FrameLayout                        flContent;
+    private TextView                           tvErr;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +76,10 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
         tvTieleJieyu = (TextView) view.findViewById(R.id.tv_title_jieyu);
         tvYear = (TextView) view.findViewById(R.id.tv_year);
         tvMonth = (TextView) view.findViewById(R.id.tv_month);
-        tvYear.setText(CaladarUtils.StringData("YEAR"));
+        flContent = (FrameLayout) view.findViewById(R.id.fl_content);
+        tvErr = (TextView) view.findViewById(R.id.tv_err);
+        view.findViewById(R.id.timepicker).setOnClickListener(this);
+        tvYear.setText(CaladarUtils.StringData("YEAR") + "年");
         tvMonth.setText(CaladarUtils.StringData("MONTH"));
         rlAdd.setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -82,6 +91,16 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                //                Toast.makeText(getActivity(), year + "-" + (month + 1) + "-" + dayOfMonth, Toast.LENGTH_SHORT).show();
+                getChargePrecenter.getDataFromServer(String.valueOf(year), String.valueOf(month + 1), String.valueOf(dayOfMonth));
+                LoadingDialog.showProgress(getActivity(), "数据加载中。。。");
+                tvYear.setText(String.valueOf(year));
+                tvMonth.setText(String.valueOf(month + 1));
+            }
+        };
     }
 
     @Override
@@ -115,25 +134,56 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
 
     @Override
     public void onClick(View v) {
-      /*  HomeActivity homeActivity = (HomeActivity) getActivity();
-        homeActivity.repleaceFragment(FragmentFactory.getFrament(5));
-        homeActivity.ivRight.setVisibility(GONE);
-        homeActivity.tvCenter.setText("我要记账");*/
-        startActivity(new Intent(getActivity(), AddChargeActivity.class));
+        switch (v.getId()) {
+            case R.id.rl_add:
+                startActivity(new Intent(getActivity(), AddChargeActivity.class));
+                break;
+            case R.id.timepicker:
+                getTime();
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    private void getTime() {
+
+        String year = CaladarUtils.StringData("YEAR");
+        String month = CaladarUtils.StringData("MONTH");
+        String day = CaladarUtils.StringData("DAY");
+
+        int intYear = Integer.parseInt(year);
+        int intMonth = Integer.parseInt(month);
+        int intDay = Integer.parseInt(day);
+
+        DatePickerDialog dialog = new DatePickerDialog(getActivity(), DatePickerDialog.THEME_HOLO_LIGHT, dateSetListener, intYear - 1, intMonth, intDay);
+        dialog.show();
+
+
     }
 
     @Override
     public void findNoData() {
+        flContent.setVisibility(VISIBLE);
+        tvErr.setText("木有数据嘞！");
+        this.list.clear();
         ToastUtils.show(getActivity(), "Sorry,木有数据嘞！");
-        LoadingDialog.dismissprogress();
+        modeAdapter.clearDatas();
+        modeAdapter.notifyDataSetChanged();
         SPTools.spPutString(getContext(), "Day", "");
+        tvTitleExpense.setText("0.00");
+        tvTitleIncome.setText("0.00");
+        tvTieleJieyu.setText("0.00");
+        LoadingDialog.dismissprogress();
     }
 
     @Override
     public void findSucc(List<AddCharge> list) {
-        LoadingDialog.dismissprogress();
+        flContent.setVisibility(GONE);
         this.list = list;
         modeAdapter = new ModeAdapter(getActivity(), R.layout.item_jizhang, list);
+        modeAdapter.notifyDataSetChanged();
         pullView.setAdapter(modeAdapter);
         pullView.setPullRefreshEnabled(true);
         //是否开启上拉加载功能
@@ -142,12 +192,20 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
         pullView.displayLastRefreshTime(true);
         //设置刷新回调
         pullView.setPullToRefreshListener(this);
+        LoadingDialog.dismissprogress();
     }
 
     @Override
     public void findFaill(String errMsg) {
-        LoadingDialog.dismissprogress();
+        flContent.setVisibility(VISIBLE);
+        tvErr.setText("服务器访问错误！");
+        this.list.clear();
+        modeAdapter.clearDatas();
         ToastUtils.show(getActivity(), "Sorry" + errMsg);
+        tvTitleExpense.setText("0.00");
+        tvTitleIncome.setText("0.00");
+        tvTieleJieyu.setText("0.00");
+        LoadingDialog.dismissprogress();
     }
 
 
@@ -212,9 +270,10 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
     @Override
     public void onResume() {
         super.onResume();
-        getChargePrecenter.getDataFromServer();
+        getChargePrecenter.getDataFromServer("", "", CaladarUtils.StringData("DAY"));
+        tvYear.setText(CaladarUtils.StringData("YEAR")+"年");
+        tvMonth.setText(CaladarUtils.StringData("MONTH"));
         LoadingDialog.showProgress(getActivity(), "数据加载中。。。");
-
     }
 
     private Double getExpenseMoney(List<AddCharge> list, String day) {
@@ -260,7 +319,6 @@ public class HomeFragment extends Fragment implements PullToRefreshListener, Vie
                 allExpenseList.add(Double.parseDouble(addCharge.getMoneyText()));
             }
         }
-
 
         for (Double expense : allExpenseList) {
             allExpense += expense;

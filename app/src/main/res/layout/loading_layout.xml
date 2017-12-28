@@ -8,32 +8,40 @@
 
     <RelativeLayout
         android:id="@+id/loading_container"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:background="@drawable/loading_bg"
         >
 
-
-        <ProgressBar
-            android:id="@+id/loading_pb"
-            style="?android:attr/progressBarStyleLarge"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            />
+            android:orientation="vertical"
+            >
 
-        <TextView
-            android:id="@+id/loading_tv"
-            android:layout_width="match_parent"
-             android:textColor="@color/color0AA770"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/loading_pb"
-            android:gravity="center"
-            android:text="正在加载..."
-            android:textSize="18sp"
-            />
+            <ProgressBar
+                android:id="@+id/loading_pb"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                />
 
+            <TextView
+                android:id="@+id/loading_tv"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
+                android:gravity="center"
+                android:text="正在加载..."
+                android:textColor="@color/color0AA770"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

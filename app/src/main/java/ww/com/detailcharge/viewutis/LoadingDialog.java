@@ -1,9 +1,12 @@
 package ww.com.detailcharge.viewutis;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.app.AppCompatDialog;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ww.com.detailcharge.R;
@@ -14,6 +17,7 @@ import ww.com.detailcharge.R;
 
 public class LoadingDialog extends AppCompatDialog {
     private static LoadingDialog mLoadingProgress;
+    private static RelativeLayout load;
 
     public LoadingDialog(Context context) {
         super(context);
@@ -32,9 +36,20 @@ public class LoadingDialog extends AppCompatDialog {
             mLoadingProgress.findViewById(R.id.loading_tv).setVisibility(View.GONE);
         } else {
             TextView tv = (TextView) mLoadingProgress.findViewById(R.id.loading_tv);
+            load = (RelativeLayout) mLoadingProgress.findViewById(R.id.loading_container);
             tv.setText(message);
         }
 
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0.8f, 0.3f);
+                alphaAnimation.setDuration(1000);
+                alphaAnimation.setRepeatMode(AlphaAnimation.REVERSE);
+                alphaAnimation.setRepeatCount(AlphaAnimation.INFINITE);
+                load.startAnimation(alphaAnimation);
+            }
+        });
         mLoadingProgress.setCancelable(false);
         mLoadingProgress.show();
     }
@@ -42,7 +57,6 @@ public class LoadingDialog extends AppCompatDialog {
 
     public static void dismissprogress(){
         if(mLoadingProgress!=null){
-
             mLoadingProgress.dismiss();
         }
     }

@@ -93,6 +93,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void registerSucc() {
         LoadingDialog.dismissprogress();
         ToastUtils.show(this, "注册成功！");
+        startActivity(LoginActivity.class);
+        finish();
     }
 
     @Override

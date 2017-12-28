@@ -72,15 +72,7 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.v7.widget.AppCompatCheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginRight="3dp"
-        android:checked="true"
-        android:text="记住密码"
-        android:textColor="@color/color0AA770"/>
+
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_login"
@@ -101,6 +93,16 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:checked="true"
+            android:text="记住密码"
+            android:textColor="@color/color0AA770"/>
+
 
         <TextView
             android:id="@+id/tv_register"

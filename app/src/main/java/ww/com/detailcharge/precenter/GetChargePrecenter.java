@@ -22,13 +22,18 @@ public class GetChargePrecenter {
         this.getChargeView = getChargeView;
     }
 
-    public void getDataFromServer() {
+    public void getDataFromServer(final String strYear, final String strMonth, final String strDay) {
         ThreadUtils.runOnSubthread(new Runnable() {
             @Override
             public void run() {
                 BmobQuery<AddCharge> query = new BmobQuery<>();
+                query.order("-year");
                 query.order("-day");
-                query.addWhereEqualTo("month", CaladarUtils.StringData("MONTH"));
+                query.addWhereEqualTo("year", strYear.equals("") ? CaladarUtils.StringData("YEAR") : strYear);
+                query.addWhereEqualTo("month", strMonth.equals("") ? CaladarUtils.StringData("MONTH") : strMonth);
+                if (!strDay.equals("")) {
+                    query.addWhereEqualTo("day", strDay);
+                }
                 query.addWhereEqualTo("id", MyApplication.getInstance().getUserinfo().getId());
                 query.findObjects(new FindListener<AddCharge>() {
                     @Override

@@ -38,5 +38,6 @@ dependencies {
     compile 'com.android.support:percent:25.2.0'
     compile 'com.androidkun:pulltorefreshrecyclerview:1.0.9'
     compile 'com.android.support:recyclerview-v7:25.0.0'
+    compile 'com.github.yilylong:DragableRecyclerView:v1.0.2'
     testCompile 'junit:junit:4.12'
 }
